@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listavideos">
+        <item>Video</item>
+        <item>Video1</item>
+        <item>Video2</item>
+        <item>Video3</item>
+    </string-array>
+
+</resources>
