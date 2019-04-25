@@ -1,6 +1,11 @@
 package com.example.usuario.youtube;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +14,10 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends permision implements per {
     VideoView miVideo1, miVideo2,miVideo3;
     int oldCurrentPosition=-1;
+    private static final int permission_stor=1;
     @Override
     protected void onPause() {
         super.onPause();
@@ -26,7 +32,19 @@ public class MainActivity extends AppCompatActivity {
             miVideo1.start();
         }
     }
+    @Override
+    public  void onRequestPermission(int requestCode,String permissions[], int []grantResults){
+        switch (requestCode){
+            case permission_stor:{
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
 
+                }else{
+
+                }
+                return;
+            }
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +67,16 @@ public class MainActivity extends AppCompatActivity {
         Button sus= findViewById(R.id.subscribe);
         Button next=findViewById(R.id.button5);
         Button next2=findViewById(R.id.button6);
+        final Intent intent=new Intent(this,Drawer_Activity.class);
+        int permissioncheck = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        //si nos concede el permiso, lanza la llamada y lanza el toast
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},permission_stor);
+            }
+        }
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,12 +113,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "DESCARGADO!!", Toast.LENGTH_SHORT).show();
+
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "GUARDADO!!", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+                intent.putExtra("Videoid","123abc");
             }
         });
         sus.setOnClickListener(new View.OnClickListener() {
@@ -100,4 +131,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
