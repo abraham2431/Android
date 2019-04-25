@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +16,9 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-public class MainActivity extends permision implements per {
+public class MainActivity extends AppCompatActivity {
     VideoView miVideo1, miVideo2,miVideo3;
     int oldCurrentPosition=-1;
-    private static final int permission_stor=1;
     @Override
     protected void onPause() {
         super.onPause();
@@ -32,19 +33,14 @@ public class MainActivity extends permision implements per {
             miVideo1.start();
         }
     }
+
+
     @Override
-    public  void onRequestPermission(int requestCode,String permissions[], int []grantResults){
-        switch (requestCode){
-            case permission_stor:{
-                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-                }else{
-
-                }
-                return;
-            }
-        }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,15 +64,14 @@ public class MainActivity extends permision implements per {
         Button next=findViewById(R.id.button5);
         Button next2=findViewById(R.id.button6);
         final Intent intent=new Intent(this,Drawer_Activity.class);
-        int permissioncheck = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        //si nos concede el permiso, lanza la llamada y lanza el toast
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-
-            }else{
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},permission_stor);
-            }
+        //permission
+        String[]mispermisos=new String[]{
+                Manifest.permission.CAMERA
+        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(mispermisos,100);
         }
+        ///
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
